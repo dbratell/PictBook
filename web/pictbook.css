@@ -1,0 +1,44 @@
+div.footer {
+    clear: both;
+    font-style: italic;
+    margin-top: 1em;
+    border-top: dotted;
+    padding-left: 1ex;
+}
+
+h1, h2, h3, p, td, th, input, a {
+   font-family: sans-serif;
+}
+
+a:hover {
+   background: #ffffcc;
+}
+
+a img {
+  border: 0px;
+}
+
+div.pictures {
+   /* text-align: center;   makes the last line look odd */
+}
+
+div.picture-block img {
+   display: block;
+}
+
+body {
+  margin: 0px; /* Need to layout it all */
+}
+
+div.linkline {
+   margin-bottom: 1ex;
+   background: #f1fff1;
+   color: black;
+   padding: 1ex;
+}
+
+h1 {
+   background: #fff1f1;
+   color: black;
+   padding: 0.5ex;
+}

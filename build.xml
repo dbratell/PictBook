@@ -1,0 +1,114 @@
+<project name="PictBook" default="dist" basedir=".">
+    <description>
+        Build PictBook
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <path id="project.class.path">
+        <pathelement location="lib/servlet.jar"/>
+        <pathelement location="lib/jmf.jar"/>
+       <!-- <pathelement path="${java.class.path}/"/>
+        <pathelement path="${additional.path}"/>       -->
+    </path>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}"
+           classpathref="project.class.path"
+           debug="on" deprecation="on"/>
+
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <property name="jar.filename" value="PictBook-${DSTAMP}.jar"/>
+    <property name="war.filename" value="PictBook-${DSTAMP}.war"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/${jar.filename}" basedir="${build}">
+        <include name="**/*.class"/>
+        <exclude name="test/*"/>
+    </jar>
+    <!-- Pack into a web archive -->
+    <war destfile="${dist}/lib/${war.filename}" basedir="${build}/../web"
+         webxml="WEB-INF/web.xml">
+        <lib dir="${dist}/lib" >
+            <include name="${jar.filename}"/>
+        </lib>
+    </war>
+  </target>
+
+  <target name="init-tomcat-manager">
+        <!-- Configure properties to access the Manager application -->
+      <property name="tomcat.manager.url" value="http://localhost:8080/manager"/>
+      <property name="tomcat.username" value="admin"/>
+      <property name="tomcat.password" value="qweasqw3"/>
+      <property name="tomcat.location" value="j:\javasajt\jakarta-tomcat-4.1.12-LE-jdk14"/>
+
+      <path  id="tomcat.classpath">
+          <pathelement location="${tomcat.location}/server/lib/catalina-ant.jar"/>
+      </path>
+
+      <!-- Configure the custom Ant tasks for the Manager application -->
+      <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="install"   classname="org.apache.catalina.ant.InstallTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="list"      classname="org.apache.catalina.ant.ListTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="reload"    classname="org.apache.catalina.ant.ReloadTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="remove"    classname="org.apache.catalina.ant.RemoveTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="roles"     classname="org.apache.catalina.ant.RolesTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="start"     classname="org.apache.catalina.ant.StartTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="stop"      classname="org.apache.catalina.ant.StopTask"
+          classpathref="tomcat.classpath"/>
+      <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask"
+          classpathref="tomcat.classpath"/>
+  </target>
+
+  <target name="undeploy-existing" depends="init-tomcat-manager"
+        description="Removes the existing PictBook">
+      <remove url="${tomcat.manager.url}"
+            username="${tomcat.username}" password="${tomcat.password}"
+            path="/PictBook"/>
+  </target>
+
+  <target name="deploy" depends="dist,init-tomcat-manager"
+       description="copy the war file to the right place and deploy it">
+      <property name="war.dest.file" value="J:\javasajt\PictBook.war"/>
+      <copy file="${dist}/lib/${war.filename}"
+            tofile="${war.dest.file}"/>
+      <install url="${tomcat.manager.url}"
+            username="${tomcat.username}" password="${tomcat.password}"
+            path="/PictBook" war="file://${war.dest.file}"/>
+  </target>
+
+  <target name="redeploy" depends="dist,undeploy-existing,deploy"
+       description="Removes the existing PictBook and installs a new one"/>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
