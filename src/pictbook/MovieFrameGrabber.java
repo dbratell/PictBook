@@ -57,7 +57,7 @@ class MovieFrameGrabber implements ControllerListener
      * @param sourceFile The movie file.
      * @param destFile The name of the file to create.
      */
-    public MovieFrameGrabber(File sourceFile, File destFile)
+    MovieFrameGrabber(File sourceFile, File destFile)
     {
         mSourceFile = sourceFile;
         mDestFile = destFile;
@@ -70,6 +70,21 @@ class MovieFrameGrabber implements ControllerListener
      * @throws IOException
      */
     public boolean grabFrame()
+            throws IOException
+    {
+        // Avoid grabbing more than one frame at a time.
+        synchronized (MovieFrameGrabber.class)
+        {
+            return grabFrameInternal();
+        }
+    }
+    /**
+     * Does the actal grabbing.
+     *
+     * @return Returns true  if the grab was successful.
+     * @throws IOException
+     */
+    public boolean grabFrameInternal()
             throws IOException
     {
         URL sourceFileUrl = mSourceFile.toURL();
@@ -249,7 +264,7 @@ class MovieFrameGrabber implements ControllerListener
 
 //        private final Processor mProcessor;
         private Format mSetFormat;
-        private boolean mHasGoodImage = false;
+        private boolean mHasGoodImage;
 
         private final Object mStopSignal;
 
@@ -258,6 +273,7 @@ class MovieFrameGrabber implements ControllerListener
         private final File mFile;
         private long mBadImageTimeStamp;
         private static final boolean DEBUG_DIVX_5 = true;
+        private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
         private FileRenderer(File file, Object stopSignal)
         {
@@ -613,7 +629,7 @@ class MovieFrameGrabber implements ControllerListener
         public Object[] getControls()
         {
             // We have no controls
-            return new Object[0];
+            return EMPTY_OBJECT_ARRAY;
         }
 
         public Object getControl(String s)
@@ -622,7 +638,7 @@ class MovieFrameGrabber implements ControllerListener
             return null;
         }
 
-        private boolean saveGrab()
+        boolean saveGrab()
             throws IOException
         {
             if (mCurrentBestGrab == null)

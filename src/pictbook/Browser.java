@@ -16,7 +16,6 @@ package pictbook;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Hashtable;
 
 /**
  * Code copied from Internet for User Agent sniffing.
@@ -42,7 +41,6 @@ public class Browser extends HttpServlet
     // --Recycle Bin (10/28/02 5:32 PM): private Locale mLocale;
 
 
-    private Hashtable supportedLanguages;
     /**
      * Company constant for mozilla.org.
      */
@@ -88,7 +86,6 @@ public class Browser extends HttpServlet
      */
     public Browser(HttpServletRequest request/*, HttpSession session */)
     {
-        initialize();
         mRequest = request;
 //        mSession = session;
         setUserAgent(mRequest.getHeader("User-Agent"));
@@ -100,13 +97,6 @@ public class Browser extends HttpServlet
 //        setOs();
 //        setLanguage();
 //        setLocale();
-    }
-
-    private void initialize()
-    {
-        supportedLanguages = new Hashtable(2);
-        supportedLanguages.put("en", "");
-        supportedLanguages.put("fr", "");
     }
 
     private void setUserAgent(String httpUserAgent)

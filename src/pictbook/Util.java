@@ -555,7 +555,7 @@ public class Util
         // Check that we aren't fooled to move to somewhere else in the
         // file tree. This won't work with symbolic links in the data dir.
         File subdir = new File(dir, subdirName);
-        if (!subdir.getParent().equals(dir))
+        if (!new File(subdir.getParent()).equals(dir))
         {
             throw new FileNotFoundException("Strange chars in the request " +
                                             "that confused PictBook. " +

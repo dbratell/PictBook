@@ -2,6 +2,7 @@ package pictbook;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Collects utility functions related to servlets.
@@ -64,7 +65,7 @@ public class ServletUtil
         {
             buf.append(servletPath);
         }
-        String pathInfo = req.getPathInfo();
+        String pathInfo = decodedPathInfo(req);
         if (pathInfo != null)
         {
             buf.append(pathInfo);
@@ -72,4 +73,34 @@ public class ServletUtil
         return buf.toString();
     }
 
+    /**
+     * We may get the path info as an UTF-8 string decoded as ASCII. :-(
+     * @param req The request
+     * @return Something that should work better than calling it directly
+     */
+    public static String decodedPathInfo(HttpServletRequest req)
+    {
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo != null && pathInfo.indexOf('Ã') != -1)
+        {
+            // very unlikely char in a normal string. Try to decode as UTF-8
+            try
+            {
+                byte[] bytes = pathInfo.getBytes("iso-8859-1");
+                return new String(bytes, "utf-8");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+            catch (RuntimeException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        // Nothing else worked or it was no utf-8 string
+        return pathInfo;
+    }
 }

@@ -40,7 +40,7 @@ public class PictureInfo implements Comparable
      * The order is not set. Date will be used to sort.
      * Undefined order must be larger than any legal orders.
      */
-    public final static int UNDEFINED_ORDER = Integer.MAX_VALUE;
+    public static final int UNDEFINED_ORDER = Integer.MAX_VALUE;
 
     /**
      * Checks if the image should be hidden.
@@ -154,7 +154,7 @@ public class PictureInfo implements Comparable
      */
     public int compareTo(Object o)
     {
-        if (this.equals(o))
+        if (equals(o))
         {
             return 0;
         }
@@ -165,7 +165,7 @@ public class PictureInfo implements Comparable
         PictureInfo other = (PictureInfo)o;
         int order;
 
-        order = this.mOrder - other.mOrder;
+        order = mOrder - other.mOrder;
         if (order == 0)
         {
             // Equal order - compare date

@@ -21,6 +21,7 @@ public class Storage
     private final Configuration mConfig;
     private static final String TOP_INFO_FILENAME = "top";
     private static final String BOOK_PREFIX = "book";
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * Creates a Storage object.
@@ -53,7 +54,7 @@ public class Storage
             if (infoFileData == null)
             {
                 // File missing
-                return new String[0];
+                return EMPTY_STRING_ARRAY;
             }
 
             ArrayList topBooks = new ArrayList();
@@ -121,19 +122,19 @@ public class Storage
         StringBuffer parsedPath = new StringBuffer("/"+pathElement);
         while (strTok.hasMoreTokens())
         {
-            String pathElement = strTok.nextToken();
-            pictDir = new File(pictDir, pathElement);
+            String pathElement2 = strTok.nextToken();
+            pictDir = new File(pictDir, pathElement2);
             if (!pictDir.exists())
             {
                 throw new FileNotFoundException("Directory \""+
-                        pathElement+"\" not found in "+
+                        pathElement2+"\" not found in "+
                         parsedPath+".");
             }
 
             // Check that we aren't fooled to move to somewhere else in the
             // file tree. This won't work with symbolic links in the data dir.
 //            File parent = dataDir;
-            dataDir = new File(dataDir, pathElement);
+            dataDir = new File(dataDir, pathElement2);
 //            if (!dataDir.getParent().equals(parent))
 //            {
 //                throw new FileNotFoundException("Strange chars in the request " +
@@ -145,10 +146,10 @@ public class Storage
             {
                 dataDir.mkdir();
             }
-            parsedPath.append("/"+pathElement);
+            parsedPath.append("/"+pathElement2);
         }
 
-        if (pictDir == null || dataDir == null)
+        if (dataDir == null)
         {
             throw new FileNotFoundException("Empty request.");
         }

@@ -41,7 +41,7 @@ public class BookServlet extends HttpServlet
             throws ServletException
     {
         System.out.println("BookServlet doGet: " + ServletUtil.getCurrentPageUrl(req));
-        String path = req.getPathInfo();
+        String path = ServletUtil.decodedPathInfo(req);
         if (path == null || path.equals("/"))
         {
             sendDefaultPage(req, res);

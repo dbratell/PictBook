@@ -189,6 +189,7 @@ public class TestJMF implements ControllerListener
         private Format mSetFormat;
 
         private final File mFile;
+        private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
         private FileRenderer(Processor processor, File file)
         {
@@ -286,7 +287,7 @@ public class TestJMF implements ControllerListener
         public Object[] getControls()
         {
             System.out.println("FileRenderer.getControls");
-            return new Object[0];
+            return EMPTY_OBJECT_ARRAY;
         }
 
         public Object getControl(String s)

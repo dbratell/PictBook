@@ -73,16 +73,16 @@ public class PictureDirInfo
     {
         File pictDir = getPictDir();
         File[] images = pictDir.listFiles(new FilenameFilter(){
-            // Only directories
+            // Only images and movies
             public boolean accept(File file, String name)
             {
                 String lowerName = name.toLowerCase();
-                return (lowerName.endsWith(".jpg") ||
-                        lowerName.endsWith(".png") ||
-                        lowerName.endsWith(".gif") ||
-                        lowerName.endsWith(".mpeg") ||
-                        lowerName.endsWith(".mpg") ||
-                        lowerName.endsWith(".avi"));
+                return lowerName.endsWith(".jpg") ||
+                       lowerName.endsWith(".png") ||
+                       lowerName.endsWith(".gif") ||
+                       lowerName.endsWith(".mpeg") ||
+                       lowerName.endsWith(".mpg") ||
+                       lowerName.endsWith(".avi");
             }
         });
 

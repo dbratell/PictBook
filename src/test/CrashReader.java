@@ -28,6 +28,11 @@ import java.util.Iterator;
  */
 public class CrashReader
 {
+    private CrashReader()
+    {
+        // "Utility" class    
+    }
+
     public static void main(String[] args) throws IOException
     {
         String[] formats = ImageIO.getReaderFormatNames();

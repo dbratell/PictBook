@@ -94,7 +94,7 @@ public class FrameAccess extends Frame implements ControllerListener
 
         // Put the Processor into configured state.
         mProcessor.configure();
-        if (!waitForState(mProcessor.Configured))
+        if (!waitForState(Processor.Configured))
         {
             System.err.println("Failed to configure the processor.");
             return false;
@@ -104,7 +104,7 @@ public class FrameAccess extends Frame implements ControllerListener
         mProcessor.setContentDescriptor(null);
 
         // Obtain the track controls.
-        TrackControl tc[] = mProcessor.getTrackControls();
+        TrackControl[] tc = mProcessor.getTrackControls();
 
         if (tc == null)
         {
@@ -135,7 +135,7 @@ public class FrameAccess extends Frame implements ControllerListener
         // Instantiate and set the frame access codec to the data flow path.
         try
         {
-            Codec codec[] = {new PreAccessCodec(),
+            Codec[] codec = {new PreAccessCodec(),
                              new PostAccessCodec()};
             videoTrack.setCodecChain(codec);
         }
@@ -277,6 +277,7 @@ public class FrameAccess extends Frame implements ControllerListener
 
     public static class PreAccessCodec implements Codec
     {
+        private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
         /**
          * Callback to access individual video frames.
@@ -290,7 +291,7 @@ public class FrameAccess extends Frame implements ControllerListener
             long t = (long) (frame.getTimeStamp() / 10000000f);
 
             System.err.println("Pre: frame #: " + frame.getSequenceNumber() +
-                               ", time: " + ((float) t) / 100f +
+                               ", time: " + (float)t / 100f +
                                ", len: " + frame.getLength());
         }
 
@@ -309,8 +310,8 @@ public class FrameAccess extends Frame implements ControllerListener
             new VideoFormat(null)
         };
 
-        Format input = null;
-        Format output = null;
+        Format input;
+        Format output;
 
         public String getName()
         {
@@ -346,7 +347,7 @@ public class FrameAccess extends Frame implements ControllerListener
                 // If an input format is given, we use that input format
                 // as the output since we are not modifying the bit stream
                 // at all.
-                Format outs[] = new Format[1];
+                Format[] outs = new Format[1];
                 outs[0] = in;
                 return outs;
             }
@@ -385,7 +386,7 @@ public class FrameAccess extends Frame implements ControllerListener
 
         public Object[] getControls()
         {
-            return new Object[0];
+            return EMPTY_OBJECT_ARRAY;
         }
 
         public Object getControl(String type)
@@ -416,7 +417,7 @@ public class FrameAccess extends Frame implements ControllerListener
             long t = (long) (frame.getTimeStamp() / 10000000f);
 
             System.err.println("Post: frame #: " + frame.getSequenceNumber() +
-                               ", time: " + ((float) t) / 100f +
+                               ", time: " + (float)t / 100f +
                                ", len: " + frame.getLength());
         }
 

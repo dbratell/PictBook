@@ -52,7 +52,7 @@ public class ImageServlet extends HttpServlet
             throws ServletException
     {
         System.out.println("ImageServlet doGet: " + ServletUtil.getCurrentPageUrl(req));
-        String path = req.getPathInfo();
+        String path = ServletUtil.decodedPathInfo(req);
         try
         {
             // Strip last part which is the file name
@@ -100,7 +100,7 @@ public class ImageServlet extends HttpServlet
                     if (e instanceof FileNotFoundException)
                     {
                         res.sendError(HttpServletResponse.SC_NOT_FOUND,
-                                req.getPathInfo() + " is not the path of an Image.");
+                                ServletUtil.decodedPathInfo(req) + " is not the path of an Image.");
                     }
                     else
                     {

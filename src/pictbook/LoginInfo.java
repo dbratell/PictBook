@@ -5,6 +5,6 @@ package pictbook;
  *
  * @author Daniel Bratell
  */
-class LoginInfo extends Object
+class LoginInfo
 {
 }
